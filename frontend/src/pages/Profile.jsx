@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { API_URL } from '../config';
 import './Profile.css';
 
-const Profile = ({ logout }) => {
-  const navigate = useNavigate();
-  const [user, setUser] = useState({ username: '', email: '' });
+const Profile = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -21,15 +20,15 @@ const Profile = ({ logout }) => {
   const fetchUserData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/auth/me', {
+      const response = await fetch(`${API_URL}/api/auth/me`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
         const data = await response.json();
-        setUser(data);
         setFormData({ ...formData, username: data.username, email: data.email });
       }
     } catch (err) {
+      console.error(err);
       setError('Failed to fetch user data.');
     }
   };
@@ -58,7 +57,7 @@ const Profile = ({ logout }) => {
         payload.password = formData.password;
       }
 
-      const response = await fetch('http://localhost:5000/api/auth/me', {
+      const response = await fetch(`${API_URL}/api/auth/me`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -70,36 +69,12 @@ const Profile = ({ logout }) => {
       const data = await response.json();
       if (response.ok) {
         setMessage('Profile updated successfully!');
-        setUser(data);
         setFormData({ ...formData, password: '', confirmPassword: '' });
       } else {
         setError(data.message || 'Failed to update profile.');
       }
     } catch (err) {
-      setError('An error occurred. Please try again.');
-    }
-  };
-
-  const handleDeleteAccount = async () => {
-    if (!window.confirm('Are you sure you want to permanently delete your account? This action cannot be undone.')) {
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/auth/me', {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      if (response.ok) {
-        logout();
-        navigate('/');
-      } else {
-        const data = await response.json();
-        setError(data.message || 'Failed to delete account.');
-      }
-    } catch (err) {
+      console.error(err);
       setError('An error occurred. Please try again.');
     }
   };

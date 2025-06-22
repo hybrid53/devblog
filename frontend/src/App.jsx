@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -9,6 +9,7 @@ import ViewPost from './pages/ViewPost';
 import EditPost from './pages/EditPost';
 import Profile from './pages/Profile';
 import DeleteAccount from './pages/DeleteAccount';
+import { API_URL } from './config';
 import './App.css';
 
 function App() {
@@ -27,7 +28,7 @@ function App() {
 
   const fetchUser = async (token) => {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/me', {
+      const response = await fetch(`${API_URL}/api/auth/me`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

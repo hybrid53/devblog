@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import CommentForm from '../components/CommentForm';
 import CommentList from '../components/CommentList';
+import { API_URL } from '../config';
 import './ViewPost.css';
 
 const ViewPost = () => {
@@ -21,7 +22,7 @@ const ViewPost = () => {
 
   const fetchPost = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/posts/${id}`);
+      const response = await fetch(`${API_URL}/api/posts/${id}`);
       if (response.ok) {
         const data = await response.json();
         setPost(data);
@@ -41,7 +42,7 @@ const ViewPost = () => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const response = await fetch('http://localhost:5000/api/auth/me', {
+        const response = await fetch(`${API_URL}/api/auth/me`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -63,7 +64,7 @@ const ViewPost = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/posts/${id}`, {
+      const response = await fetch(`${API_URL}/api/posts/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -84,7 +85,7 @@ const ViewPost = () => {
   const handleLikeDislike = async (action) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/posts/${id}/${action}`, {
+      const response = await fetch(`${API_URL}/api/posts/${id}/${action}`, {
         method: 'PUT',
         headers: { 'Authorization': `Bearer ${token}` }
       });

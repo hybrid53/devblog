@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { API_URL } from '../config';
 import './CommentForm.css';
 
 const CommentForm = ({ postId, onCommentAdded }) => {
@@ -16,7 +17,7 @@ const CommentForm = ({ postId, onCommentAdded }) => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/posts/${postId}/comment`, {
+      const response = await fetch(`${API_URL}/api/posts/${postId}/comment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { API_URL } from '../config';
 import './CreatePost.css';
 
 const EditPost = ({ user }) => {
@@ -29,7 +30,7 @@ const EditPost = ({ user }) => {
 
   const fetchPost = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/posts/${id}`);
+      const response = await fetch(`${API_URL}/api/posts/${id}`);
       if (response.ok) {
         const data = await response.json();
         
@@ -96,7 +97,7 @@ const EditPost = ({ user }) => {
       }
 
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/posts/${id}`, {
+      const response = await fetch(`${API_URL}/api/posts/${id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`

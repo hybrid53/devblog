@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { API_URL } from '../config';
 import './CommentList.css';
 
-const CommentList = ({ postId, comments, user, onCommentChange }) => {
+const CommentList = ({ postId, comments, setComments, currentUser }) => {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedText, setEditedText] = useState('');
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -19,7 +20,7 @@ const CommentList = ({ postId, comments, user, onCommentChange }) => {
   const handleUpdate = async (commentId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/posts/${postId}/comment/${commentId}`, {
+      const response = await fetch(`${API_URL}/api/posts/${postId}/comment/${commentId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -30,7 +31,7 @@ const CommentList = ({ postId, comments, user, onCommentChange }) => {
 
       if (response.ok) {
         const updatedPost = await response.json();
-        onCommentChange(updatedPost.comments);
+        setComments(updatedPost.comments);
         setEditingCommentId(null);
         setEditedText('');
       } else {
@@ -48,7 +49,7 @@ const CommentList = ({ postId, comments, user, onCommentChange }) => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/posts/${postId}/comment/${commentId}`, {
+      const response = await fetch(`${API_URL}/api/posts/${postId}/comment/${commentId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -57,7 +58,7 @@ const CommentList = ({ postId, comments, user, onCommentChange }) => {
 
       if (response.ok) {
         const updatedPost = await response.json();
-        onCommentChange(updatedPost.comments);
+        setComments(updatedPost.comments);
       } else {
         console.error('Failed to delete comment');
       }
@@ -69,7 +70,7 @@ const CommentList = ({ postId, comments, user, onCommentChange }) => {
   const handleCommentLikeDislike = async (commentId, action) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/posts/${postId}/comment/${commentId}/${action}`, {
+      const response = await fetch(`${API_URL}/api/posts/${postId}/comment/${commentId}/${action}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -77,7 +78,7 @@ const CommentList = ({ postId, comments, user, onCommentChange }) => {
       });
       if (response.ok) {
         const updatedPost = await response.json();
-        onCommentChange(updatedPost.comments);
+        setComments(updatedPost.comments);
       }
     } catch (error) {
       console.error(`Error ${action} comment:`, error);
@@ -128,18 +129,18 @@ const CommentList = ({ postId, comments, user, onCommentChange }) => {
               <div className="comment-feedback">
                 <button 
                   onClick={() => handleCommentLikeDislike(comment._id, 'like')}
-                  className={`btn-feedback ${comment.likes.includes(user?.id) ? 'active' : ''}`}
+                  className={`btn-feedback ${comment.likes.includes(currentUser?.id) ? 'active' : ''}`}
                 >
                   👍 {comment.likes.length}
                 </button>
                 <button
                   onClick={() => handleCommentLikeDislike(comment._id, 'dislike')}
-                  className={`btn-feedback ${comment.dislikes.includes(user?.id) ? 'active' : ''}`}
+                  className={`btn-feedback ${comment.dislikes.includes(currentUser?.id) ? 'active' : ''}`}
                 >
                   👎 {comment.dislikes.length}
                 </button>
               </div>
-              {user && user.id === comment.postedBy?._id && editingCommentId !== comment._id && (
+              {currentUser && currentUser.id === comment.postedBy?._id && editingCommentId !== comment._id && (
                 <div 
                   className="comment-actions"
                   onMouseEnter={() => setActiveDropdown(comment._id)}

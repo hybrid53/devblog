@@ -1,0 +1,1 @@
+export const API_URL = 'https://devblog-4j5d.onrender.com'; 

@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_URL } from '../config';
 import './DeleteAccount.css';
 
 const DeleteAccount = ({ logout }) => {
@@ -19,11 +20,12 @@ const DeleteAccount = ({ logout }) => {
     setPassword('');
   };
 
-  const handleConfirmDeletion = async () => {
+  const handleConfirmDeletion = async (e) => {
+    e.preventDefault();
     setError('');
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/auth/me', {
+      const response = await fetch(`${API_URL}/api/auth/me`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -41,10 +43,11 @@ const DeleteAccount = ({ logout }) => {
           navigate('/');
         }, 4000);
       } else {
-        setError(data.message || 'Failed to delete account.');
+        setError(data.message || 'An error occurred during account deletion.');
       }
     } catch (err) {
-      setError('An error occurred. Please try again.');
+      console.error(err);
+      setError('An unexpected error occurred. Please try again later.');
     }
   };
   
