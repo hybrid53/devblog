@@ -1,0 +1,27 @@
+.delete-account-container {
+  max-width: 600px;
+  margin: 4rem auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.delete-account-card {
+  padding: 2rem;
+}
+
+.delete-account-title {
+  color: #dc3545;
+  margin-bottom: 1rem;
+}
+
+.delete-account-warning {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.delete-account-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+} 
