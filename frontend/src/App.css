@@ -196,7 +196,17 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
   .main-content {
-    padding: 1rem;
+    padding: 0.5rem;
+    width: 100vw;
+    max-width: 100vw;
+    box-sizing: border-box;
+  }
+  .card {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100vw;
+    max-width: 100vw;
+    box-sizing: border-box;
   }
   
   .grid-2,
@@ -207,6 +217,16 @@ body {
   .btn {
     width: 100%;
     margin-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content,
+  .card {
+    padding: 0.25rem;
+    width: 100vw;
+    max-width: 100vw;
+    box-sizing: border-box;
   }
 }
 
